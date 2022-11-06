@@ -16,6 +16,7 @@ import {
 } from 'chart.js'
 import { getYearLabels } from '~/utils/chart'
 import { css } from '@emotion/react'
+import Spin from '~/components/atoms/spin'
 
 ChartJS.register(
   CategoryScale,
@@ -32,15 +33,27 @@ interface Props {}
 const PopulationGraph: React.FC<Props> = memo(() => {
   const populations = useAppSelector((state) => state.resas.populations)
   const prefectures = useAppSelector((state) => state.resas.prefectures)
-  return <Component populations={populations} prefectures={prefectures} />
+  const loadingMarkers = useAppSelector((state) => state.resas.loadingMarkers)
+  return (
+    <Component
+      populations={populations}
+      prefectures={prefectures}
+      loadingMarkers={loadingMarkers}
+    />
+  )
 })
 
 interface IProps {
   populations: PrefecturePopulation[]
   prefectures: Prefecture[]
+  loadingMarkers: boolean
 }
 
-export const Component: React.FC<IProps> = ({ populations, prefectures }) => {
+export const Component: React.FC<IProps> = ({
+  populations,
+  prefectures,
+  loadingMarkers,
+}) => {
   const labels = getYearLabels(populations)
   const datasets = populations.map((population) => {
     return {
@@ -68,7 +81,11 @@ export const Component: React.FC<IProps> = ({ populations, prefectures }) => {
 
   return (
     <div css={LineStyle}>
-      <Line height={10} width={10} data={graphData} options={options} />
+      {loadingMarkers ? (
+        <Spin />
+      ) : (
+        <Line height={10} width={10} data={graphData} options={options} />
+      )}
     </div>
   )
 }

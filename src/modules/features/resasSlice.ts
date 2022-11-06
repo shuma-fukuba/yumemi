@@ -29,26 +29,31 @@ export interface ResasState {
   prefectures: Prefecture[]
   populations: PrefecturePopulation[]
   selectedPrefectures: number[]
+  loadingMarkers: boolean
 }
 
 const initialState: ResasState = {
   prefectures: [],
   populations: [],
   selectedPrefectures: [],
+  loadingMarkers: false,
 }
 
 export const readPrefectures = createAsyncThunk(
   'resas/readPrefecture',
   async (_, thunkApi) => {
     try {
+      thunkApi.dispatch(updateLoadingMarkers(true))
       const res = await api.get<ResponsePrefecturesSchema>({
         url: `${RESAS_API_URI}/prefectures`,
       })
       const { data, status } = res
 
       const prefectures = data.result.map((d) => new Prefecture(d))
+      thunkApi.dispatch(updateLoadingMarkers(false))
       return { prefectures }
     } catch (error) {
+      thunkApi.dispatch(updateLoadingMarkers(false))
       return thunkApi.rejectWithValue({ prefectures: [] })
     }
   }
@@ -72,7 +77,6 @@ export const readPopulations = createAsyncThunk<
       throw error
     }
   }
-
   thunkApi.dispatch(updateSelectedPrefectures(prefectureIds))
 
   try {
@@ -101,6 +105,9 @@ export const resasSlice = createSlice({
     updateSelectedPrefectures: (state, action) => {
       state.selectedPrefectures = action.payload
     },
+    updateLoadingMarkers: (state, action) => {
+      state.loadingMarkers = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -113,6 +120,7 @@ export const resasSlice = createSlice({
   },
 })
 
-export const { updateSelectedPrefectures } = resasSlice.actions
+export const { updateSelectedPrefectures, updateLoadingMarkers } =
+  resasSlice.actions
 
 export default resasSlice.reducer

@@ -3,28 +3,29 @@ import React, { memo } from 'react'
 import CheckBox from '~/components/moleculus/checkbox'
 import { Prefecture } from '~/entities/prefecture'
 import { useAppSelector } from '~/hooks/redux'
+import Spin from '~/components/atoms/spin'
 interface Props {}
 
 const CheckBoxes: React.FC<Props> = memo(() => {
-  const { prefectures } = useAppSelector(
-    (state) => state.resas
-  )
-  return <Component {...{ prefectures }} />
+  const { prefectures, loadingMarkers } = useAppSelector((state) => state.resas)
+  return <Component {...{ prefectures, loadingMarkers }} />
 })
 
 interface IProps {
   prefectures: Prefecture[]
+  loadingMarkers: boolean
 }
 
-const Component: React.FC<IProps> = ({
-  prefectures,
-}) => {
-
+const Component: React.FC<IProps> = ({ prefectures, loadingMarkers }) => {
   return (
     <div css={CheckBoxesWrapper}>
-      {prefectures.map((item, index) => (
-        <CheckBox prefecture={item} key={index} />
-      ))}
+      {loadingMarkers ? (
+        <Spin />
+      ) : (
+        prefectures.map((item, index) => (
+          <CheckBox prefecture={item} key={index} />
+        ))
+      )}
     </div>
   )
 }
