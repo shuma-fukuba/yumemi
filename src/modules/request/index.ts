@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import { NEXT_PUBLIC_RESAS_API_KEY } from '~/const/uri'
+import { NEXT_PUBLIC_RESAS_API_KEY } from '~/const/env'
 
 interface RequestOption {
   url: string

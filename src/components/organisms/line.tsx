@@ -74,9 +74,12 @@ export const Component: React.FC<IProps> = ({ populations, prefectures }) => {
 }
 
 const LineStyle = css`
-  height: 300px;
+  height: 400px;
   width: 1000px;
   max-width: 100%;
+  background-color: #f3f3f3;
+  padding: 20px;
+  border-radius: 20px;
 `
 
 export default PopulationGraph

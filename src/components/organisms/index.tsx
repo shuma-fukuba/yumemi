@@ -5,7 +5,7 @@ import { readPrefectures } from '~/modules/features/resasSlice'
 import { useCallback } from 'react'
 import CheckBoxes from './checkbox'
 import { css } from '@emotion/react'
-import PopulationGraph from '~/components/organisms/chart/line'
+import PopulationGraph from '~/components/organisms/line'
 
 
 interface Props {}
@@ -21,8 +21,6 @@ const Home: React.FC<Props> = memo(() => {
   useEffect(() => {
     fetchPrefectures()
   }, [dispatch, fetchPrefectures])
-
-  console.log(populations)
 
   return (
     <div>

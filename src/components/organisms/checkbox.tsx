@@ -1,30 +1,23 @@
 import { css } from '@emotion/react'
-import React, { memo, useCallback } from 'react'
+import React, { memo } from 'react'
 import CheckBox from '~/components/moleculus/checkbox'
 import { Prefecture } from '~/entities/prefecture'
-import { useAppSelector, useAppDispatch } from '~/hooks/redux'
-import { AppDispatch } from '~/modules/store'
-import { useEffect } from 'react';
+import { useAppSelector } from '~/hooks/redux'
 interface Props {}
 
 const CheckBoxes: React.FC<Props> = memo(() => {
-  const dispatch = useAppDispatch()
-  const { prefectures, selectedPrefectures } = useAppSelector(
+  const { prefectures } = useAppSelector(
     (state) => state.resas
   )
-  return <Component {...{ prefectures, selectedPrefectures, dispatch }} />
+  return <Component {...{ prefectures }} />
 })
 
 interface IProps {
   prefectures: Prefecture[]
-  selectedPrefectures: number[]
-  dispatch: AppDispatch
 }
 
 const Component: React.FC<IProps> = ({
   prefectures,
-  selectedPrefectures,
-  dispatch,
 }) => {
 
   return (
@@ -45,6 +38,9 @@ const CheckBoxesWrapper = css`
   width: 1000px;
   margin-bottom: 60px;
   max-width: 100%;
+  background-color: #f3f3f3;
+  padding: 20px;
+  border-radius: 10px;
 `
 
 export default CheckBoxes

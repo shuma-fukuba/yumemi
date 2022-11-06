@@ -4,6 +4,7 @@ import { Prefecture } from '~/entities/prefecture'
 import { useAppSelector, useAppDispatch } from '~/hooks/redux'
 import { updateSelectedPrefectures } from '~/modules/features/resasSlice'
 import { readPopulations } from '~/modules/features/resasSlice';
+import mq from '~/styles/responsive'
 
 interface Props {
   prefecture: Prefecture
@@ -44,6 +45,10 @@ const CheckBox: React.FC<Props> = ({ prefecture }) => {
 
 const CheckBoxStyle = css`
   width: 20%;
+
+  ${mq['smartphone']} {
+    width: 50%;
+  }
 `
 
 const LabelStyle = css`
