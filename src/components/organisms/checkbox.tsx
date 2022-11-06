@@ -44,4 +44,6 @@ const CheckBoxesWrapper = css`
   border-radius: 10px;
 `
 
+CheckBoxes.displayName = 'CheckBoxes Wrapper'
+
 export default CheckBoxes

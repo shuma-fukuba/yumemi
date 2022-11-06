@@ -7,6 +7,8 @@ const Spin: React.FC<Props> = memo(({}) => {
   return <div css={LoaderStyle}>Loading...</div>
 })
 
+Spin.displayName = 'Spin'
+
 const LoaderStyle = css`
   background: #ffffff;
   -webkit-animation: load1 1s infinite ease-in-out;
