@@ -6,7 +6,6 @@ import { AppDispatch, RootState } from '~/modules/store'
 import api from '~/modules/request'
 import { ResponsePopulationsSchema } from '~/entities/population'
 
-
 interface PopulationPerYear {
   year: number
   value: number

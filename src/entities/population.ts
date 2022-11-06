@@ -37,11 +37,11 @@ export class PrefecturePopulation {
   }
 
   get populationData() {
-    return this.data.map(d => {
+    return this.data.map((d) => {
       return {
-        'year': d.year,
-        'value': d.value,
-        'prefCode': this.prefCode
+        year: d.year,
+        value: d.value,
+        prefCode: this.prefCode,
       }
     })
   }

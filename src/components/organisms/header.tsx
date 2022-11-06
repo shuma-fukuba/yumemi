@@ -23,4 +23,6 @@ const HeaderStyle = css`
   }
 `
 
+Header.displayName = 'Header'
+
 export default Header
