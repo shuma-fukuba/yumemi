@@ -2,8 +2,7 @@ import { css } from '@emotion/react'
 import { useCallback } from 'react'
 import { Prefecture } from '~/entities/prefecture'
 import { useAppSelector, useAppDispatch } from '~/hooks/redux'
-import { updateSelectedPrefectures } from '~/modules/features/resasSlice'
-import { readPopulations } from '~/modules/features/resasSlice';
+import { readPopulations } from '~/modules/features/resasSlice'
 import mq from '~/styles/responsive'
 
 interface Props {
@@ -23,9 +22,9 @@ const CheckBox: React.FC<Props> = ({ prefecture }) => {
       const newSelectedPrefectures = selected
         ? [...selectedPrefectures, prefectureId]
         : selectedPrefectures.filter((row) => row !== prefectureId)
-      dispatch(readPopulations({ prefectureIds: newSelectedPrefectures}))
+      dispatch(readPopulations({ prefectureIds: newSelectedPrefectures }))
     },
-    [dispatch, updateSelectedPrefectures, selectedPrefectures]
+    [dispatch, selectedPrefectures]
   )
 
   return (
@@ -53,5 +52,7 @@ const CheckBoxStyle = css`
 const LabelStyle = css`
   display: block;
 `
+
+CheckBox.displayName = 'CheckBox'
 
 export default CheckBox

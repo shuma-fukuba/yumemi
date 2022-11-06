@@ -98,4 +98,6 @@ const LineStyle = css`
   border-radius: 20px;
 `
 
+PopulationGraph.displayName = 'PopulationGraph'
+
 export default PopulationGraph
