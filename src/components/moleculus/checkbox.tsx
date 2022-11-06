@@ -35,7 +35,6 @@ const CheckBox: React.FC<Props> = ({ prefecture }) => {
           type="checkbox"
           value={prefecture.prefCode}
           onChange={handleCheck}
-          // checked={selectedPrefectures.includes(prefecture.prefCode)}
         />
         {prefecture.prefName}
       </label>
