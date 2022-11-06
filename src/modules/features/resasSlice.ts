@@ -6,9 +6,6 @@ import { AppDispatch, RootState } from '~/modules/store'
 import api from '~/modules/request'
 import { ResponsePopulationsSchema } from '~/entities/population'
 
-// export interface Prefecture {
-//     [prefCode: number]: string
-// }
 
 interface PopulationPerYear {
   year: number

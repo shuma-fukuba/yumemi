@@ -5,7 +5,6 @@ import { Provider } from 'react-redux'
 import { store } from '~/modules/store'
 
 
-``
 const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
   return (
     <Provider store={store}>
