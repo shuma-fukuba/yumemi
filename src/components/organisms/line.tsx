@@ -1,5 +1,4 @@
-import { memo, useEffect } from 'react'
-// import { G2, Line as AntdLine } from '@ant-design/charts'
+import { memo } from 'react'
 import { useAppSelector } from '~/hooks/redux'
 import { PrefecturePopulation } from '~/entities/population'
 import { Prefecture } from '~/entities/prefecture'
