@@ -16,7 +16,6 @@ export interface ResponsePopulationsSchema {
   }
 }
 
-// 各年の人口のデータ
 export class Population {
   year: number
   value: number
