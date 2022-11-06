@@ -1,27 +1,46 @@
 import { memo, useEffect } from 'react'
-import api from '~/modules/request'
-import { RESAS_API_URI } from '~/modules/request/api'
 import Header from './header'
 import { useAppDispatch, useAppSelector } from '~/hooks/redux'
 import { readPrefectures } from '~/modules/features/resasSlice'
+import { useCallback } from 'react'
+import CheckBoxes from './checkbox'
+import { css } from '@emotion/react'
+import PopulationGraph from '~/components/organisms/chart/line'
+
 
 interface Props {}
 
 const Home: React.FC<Props> = memo(() => {
   const dispatch = useAppDispatch()
-  const { prefectures } = useAppSelector((state) => state.resas)
+  const populations = useAppSelector(state => state.resas.populations)
+
+  const fetchPrefectures = useCallback(() => {
+    dispatch(readPrefectures())
+  }, [dispatch, readPrefectures])
 
   useEffect(() => {
-    dispatch(readPrefectures())
-    console.log(prefectures)
-  })
+    fetchPrefectures()
+  }, [dispatch, fetchPrefectures])
+
+  console.log(populations)
 
   return (
     <div>
       <Header />
-      <h1>Home</h1>
+      <div css={MainWrapper}>
+        <CheckBoxes />
+        <PopulationGraph />
+      </div>
     </div>
   )
 })
+
+export const MainWrapper = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+`
 
 export default Home

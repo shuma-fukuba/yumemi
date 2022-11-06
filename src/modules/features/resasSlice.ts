@@ -1,14 +1,10 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Optional } from '~/entities/base'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { PrefecturePopulation } from '~/entities/population'
-import {
-  Prefecture,
-  ResponsePrefectureSchema,
-  ResponsePrefecturesSchema,
-} from '~/entities/prefecture'
+import { Prefecture, ResponsePrefecturesSchema } from '~/entities/prefecture'
 import { RESAS_API_URI } from '~/modules/request/api'
 import { AppDispatch, RootState } from '~/modules/store'
 import api from '~/modules/request'
+import { ResponsePopulationsSchema } from '~/entities/population'
 
 // export interface Prefecture {
 //     [prefCode: number]: string
@@ -24,14 +20,21 @@ export interface Population {
   data: PopulationPerYear[]
 }
 
+export interface LineChartDataSchema {
+  year: number
+  [prefCode: number]: number
+}
+
 export interface ResasState {
   prefectures: Prefecture[]
-  populations: Optional<PrefecturePopulation[]>
+  populations: PrefecturePopulation[]
+  selectedPrefectures: number[]
 }
 
 const initialState: ResasState = {
   prefectures: [],
-  populations: undefined,
+  populations: [],
+  selectedPrefectures: [],
 }
 
 export const readPrefectures = createAsyncThunk(
@@ -51,15 +54,65 @@ export const readPrefectures = createAsyncThunk(
   }
 )
 
+export const readPopulations = createAsyncThunk<
+  { populations: PrefecturePopulation[] },
+  { prefectureIds: number[] },
+  { dispatch: AppDispatch; state: RootState }
+>('resas/reawdPopulations', async ({ prefectureIds }, thunkApi) => {
+  const readPopulationByPrefectureId: (
+    prefectureId: number
+  ) => Promise<ResponsePopulationsSchema> = async (prefectureId: number) => {
+    try {
+      const res = await api.get<ResponsePopulationsSchema>({
+        url: `${RESAS_API_URI}/population/composition/perYear`,
+        params: { prefCode: prefectureId },
+      })
+      return res.data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  thunkApi.dispatch(updateSelectedPrefectures(prefectureIds))
+
+  try {
+    const populations = await Promise.all(
+      prefectureIds.map(async (prefectureId) => {
+        const responsePopulation = await readPopulationByPrefectureId(
+          prefectureId
+        )
+        const population = responsePopulation.result.data.find(
+          (d) => d.label === '総人口'
+        )
+        return new PrefecturePopulation(population, prefectureId)
+      })
+    )
+
+    return { populations }
+  } catch (error) {
+    return thunkApi.rejectWithValue({ populations: [] })
+  }
+})
+
 export const resasSlice = createSlice({
   name: 'resas',
   initialState,
-  reducers: {},
+  reducers: {
+    updateSelectedPrefectures: (state, action) => {
+      state.selectedPrefectures = action.payload
+    },
+  },
   extraReducers: (builder) => {
-    builder.addCase(readPrefectures.fulfilled, (state, action) => {
-      state.prefectures = action.payload.prefectures
-    })
+    builder
+      .addCase(readPrefectures.fulfilled, (state, action) => {
+        state.prefectures = action.payload.prefectures
+      })
+      .addCase(readPopulations.fulfilled, (state, action) => {
+        state.populations = action.payload.populations
+      })
   },
 })
+
+export const { updateSelectedPrefectures } = resasSlice.actions
 
 export default resasSlice.reducer

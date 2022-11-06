@@ -1,34 +1,48 @@
-import { Entity, Id, ResponseEntityIdSchema } from './base'
-import { Prefecture } from './prefecture'
-
-export interface ResponsePopulationSchema extends ResponseEntityIdSchema {
+export interface ResponsePopulationSchema {
   year: number
-  value: string
+  value: number
 }
 
-export interface ResponsePopulationsSchema extends ResponseEntityIdSchema {
+export interface ResponsePopulationDataSetSchema {
+  label: string
   data: ResponsePopulationSchema[]
 }
 
+export interface ResponsePopulationsSchema {
+  message: null
+  result: {
+    boundaryYear: number
+    data: ResponsePopulationDataSetSchema[]
+  }
+}
+
 // 各年の人口のデータ
-export class Population extends Entity<Id> {
+export class Population {
   year: number
-  value: string
+  value: number
   constructor(props: ResponsePopulationSchema) {
-    super(props)
     this.year = props.year
     this.value = props.value
   }
 }
 
 // ある都道府県の人口のデータセット
-export class PrefecturePopulation extends Entity<Id> {
+export class PrefecturePopulation {
   data: Population[]
   prefCode: number
 
-  constructor(props: ResponsePopulationsSchema, prefCode: number) {
-    super(props)
+  constructor(props: ResponsePopulationDataSetSchema, prefCode: number) {
     this.data = props.data.map((d) => new Population(d))
     this.prefCode = prefCode
+  }
+
+  get populationData() {
+    return this.data.map(d => {
+      return {
+        'year': d.year,
+        'value': d.value,
+        'prefCode': this.prefCode
+      }
+    })
   }
 }
